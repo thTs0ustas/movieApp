@@ -72,6 +72,7 @@ The application is structured using a layered architecture to separate concerns 
 - The login passes through an API route in Next.js to securely handle authentication.
 - The token is stored in an HTTP-only cookie to enhance security against XSS attacks.
 - Every API request that requires authentication includes the token in the headers.
+- I didn't implement an extra validation for the token assuming the end API handles that, so the token is considered valid if present.
 - The home page checks for the presence of a valid token to determine if the user is logged in.
 - This updates the UI accordingly, showing user-specific features like favorite movies (fetching data for the user).
 - The logout functionality clears the token from the cookies and updates the application state (fetching new data).
@@ -85,3 +86,8 @@ The application is structured using a layered architecture to separate concerns 
 - TypeScript is used throughout the application to ensure type safety and reduce runtime errors.
 - Zod is employed for schema validation, for the form inputs.
 
+### Mock Data
+- I created mocked data and intercepted API calls using MSW (Mock Service Worker) for development and testing purposes.
+- This was only for testing purposes, during the development phase.
+- Tests are not implemented in this version.
+- In case of a real-world application, I would use a honeycomb structure for the tests, including unit tests, integration tests for API interactions and UI flows.
