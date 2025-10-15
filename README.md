@@ -4,6 +4,30 @@
 We need to build a movie discovery web application that allows users to browse movies 
 and view details for each movie. Users can also log in and add movies as favorites.
 
+## Installation
+1. Clone the repository
+2. Install dependencies (I am using pnpm as the package manager):
+   ```bash
+   // If not activated yet
+   corepack enabled
+   corepack prepare pnpm@latest --activate
+   pnpm install
+   ```
+3. Start the development server:
+   ```bash 
+    pnpm dev
+    ```
+4. Open your browser and navigate to `http://localhost:3000`
+5. To build the application for production:
+   ```bash
+   pnpm build
+   ```
+6. To start the production server:
+   ```bash
+   pnpm start
+   ```
+   
+
 
 ## Features
 1. **Movie Listing**: Display a list of movies with their titles and posters.
