@@ -1,0 +1,1 @@
+export { MovieCardsSkeleton } from './MovieCardSkeleton';

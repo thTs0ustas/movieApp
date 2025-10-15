@@ -1,0 +1,1 @@
+export { useModelProps } from './useModelProps';
