@@ -1,19 +1,28 @@
 import { useRouter } from 'next/router';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import { useAppModelProps } from '@/store/hooks';
 import { useLoginMutation } from '@/models/auth/services';
 import type { LoginRequest } from '@/models/auth/types';
 import { setUser } from '@/models/auth/actions';
+import { selectToken } from '@/models/auth/selectors';
 
 import { usernameSchema, passwordSchema } from './validations';
 
+
 export const LoginForm = () => {
   const router = useRouter();
-  const { setUserAction } = useAppModelProps({
+  const { setUserAction,token } = useAppModelProps({
     setUserAction: setUser,
+    token: selectToken
   });
+
+  useEffect(() => {
+    if (token) {
+      void router.push('/');
+    }
+  }, [token, router]);
 
   const [login, { isLoading }] = useLoginMutation();
 

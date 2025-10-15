@@ -1,45 +1,87 @@
 # Movie Discovery App
 
 ## Overview
-We need to build a movie discovery web application that allows users to browse movies and view details for each movie. Users can also log in and add movies as favorites.
+We need to build a movie discovery web application that allows users to browse movies 
+and view details for each movie. Users can also log in and add movies as favorites.
 
-## Movie API
-For the needs of this app, we have already deployed a basic API that you can use.
-You can find details on how to use the API in the [API docs](API_DOCS.md). For authentication, you can use the credentials provided to you by email.
 
-## Requirements
+## Features
+1. **Movie Listing**: Display a list of movies with their titles and posters.
+2. **Movie Details**: Show detailed information about a selected movie, including title,
+   description, release date, and rating.
+3. **User Authentication**: Allow users to sign up, log in, and log out.
+4. **Favorite Movies**: Enable logged-in users to add or remove movies from their list
+   of favorites.
 
-### Core Features
+## Technologies
+- Frontend: React.js
+- Framework: Next.js
+- State Management: ReduxToolkit
+- Tailwind CSS for styling with Shadcn UI components
+- Zod for schema validation
+- TypeScript for type safety
 
-#### 1. Movie Browsing
-* A movies list page that displays all 16 movies as cards
-* The list page must have pagination (8 movies per page)
-* Each card should have movie poster, title, year, director, genre, rating, and description
-* For authenticated users, an "Add to favorites" button should also be included
-* Each card should link to a dedicated movie page with details
-* Users should be able to easily navigate back to the list page
+## App Structure
+- `pages/`: Contains the main pages of the application
+- `components/`: Reusable UI components
+- `store/`: Redux store
+- `styles/`: Tailwind CSS configuration and custom styles
+- `utils/`: Utility functions and helpers
+- `types/`: TypeScript type definitions
+- `models/`: Slice models for Redux and service interactions
+- `hooks/`: Custom React hooks
 
-#### 2. Authentication System
-* A login page with a username/password form
-* When users are logged in, their username should appear in the application header
-* Users should be able to log out
+## Approach
 
-#### 3. Favorites Management
-* Users are able to add/remove a movie to/from their favorites from the list page and the movie detail page
-* Favorited movies should have a visual distinction from non-favorited movies
+### Layered Architecture
+The application is structured using a layered architecture to separate concerns and improve maintainability:
+1. **Presentation Layer**: This layer includes React components and pages that handle the UI and user interactions.
+2. **Business Logic Layer**: This layer contains Redux slices and services that manage application state and business logic.
+3. **Data Access Layer**: This layer is responsible for interacting with external APIs and data sources.
 
-### Technical Requirements
-You can implement the above using any modern JavaScript framework, styling solution, and third-party library you choose to use. However, there are some technical requirements that should be addressed:
+### Next.js for SSR and CSR
+- The application leverages Next.js to provide both server-side rendering (SSR) and static site generation (SSG) for improved performance and SEO.
+- Dynamic routing is used to handle movie detail pages.
+- API routes in Next.js are utilized for handling authentication and other server-side logic as an extra layer of security.
 
-* Basic browsing functionality should work with JavaScript disabled in the browser
-* Login state should persist across browser sessions
-* Since the API is rate limited, we need to gracefully handle errors
+### State Management with Redux Toolkit and RTK Query
+- Use RTK Query for efficient data fetching and caching.
+  - All API interactions are handled through RTK Query endpoints.
+  - This simplifies data fetching logic and reduces boilerplate code.
+  - RTK Query handles state management for server data, including loading and error states.
+  - A global mechanism for error handling is implemented using RTK Query's and middleware capabilities.
+- Create Redux slices for managing local state.
+  - A redux slice is created for managing user authentication state.
+  - I made redux accessible during SSR and CSR using `next-redux-wrapper`.
 
-### Bonus Features
-* The API is a little slow as each request takes at least 500ms to get a response. Can you think of ways to make the perceived user experience faster?
-* Movie detail pages should be optimized for search engines and for sharing. It would be nice to have proper meta tags and SEO-friendly URLs.
+### Ui Styling with Tailwind CSS and Shadcn UI
+- Tailwind CSS is used for utility-first styling, allowing for rapid UI development.
+- Shadcn UI components are integrated for pre-built, accessible UI components that can be easily customized.
+- A consistent design system is maintained using Tailwind's configuration.
 
-## Submission Guidelines
-Once your implementation is ready, please share it with us as a GitHub public repo link. Be sure to include a README.md with instructions on how to run the app, a brief summary of your approach, plus any notes or known limitations.
+### Rendering
+- The home page displays a list of movies fetched from an external API using RTK Query.
+- The data are fetched on the server side for the initial load to improve performance and SEO.
+- Although the home page is public, I added SSR here to also authenticate the user if a valid token is present in the cookies.
+- The movie detail page is statically generated at build time for better performance and SEO.
+- The movie detail page uses dynamic routing to display information based on the movie ID.
 
-Good luck! We're excited to see your implementation.
+### Authentication
+- The api provided for authentication returns a mocked JWT token upon successful login.
+- I assumed for this implementation that the token contains the username in its claims.
+- The login passes through an API route in Next.js to securely handle authentication.
+- The token is stored in an HTTP-only cookie to enhance security against XSS attacks.
+- Every API request that requires authentication includes the token in the headers.
+- The home page checks for the presence of a valid token to determine if the user is logged in.
+- This updates the UI accordingly, showing user-specific features like favorite movies (fetching data for the user).
+- The logout functionality clears the token from the cookies and updates the application state (fetching new data).
+
+### SEO Optimization and Accessibility
+- Each page includes meta tags for titles and descriptions to improve search engine visibility.
+- Next.js's built-in SEO features are utilized to enhance the application's search engine ranking.
+- Add ARIA attributes and ensure keyboard navigability to enhance accessibility.
+
+### Type Safety with TypeScript and Zod
+- TypeScript is used throughout the application to ensure type safety and reduce runtime errors.
+- Zod is employed for schema validation, for the form inputs.
+
