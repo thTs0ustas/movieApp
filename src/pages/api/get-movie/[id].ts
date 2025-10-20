@@ -4,11 +4,15 @@ import { makeRequest } from '@/utils/make-request';
 import { API_BASE_URL } from '@/config';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.query;
+  try {
+    const { id } = req.query;
 
-  const response = await makeRequest(`${API_BASE_URL}/movies/${id}`, {});
+    const response = await makeRequest(`${API_BASE_URL}/movies/${id}`);
 
-  res.json(response);
+    res.json(response);
+  } catch (error) {
+    res.status(500).json(error);
+  }
 };
 
 export default handler;

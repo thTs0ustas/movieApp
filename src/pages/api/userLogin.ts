@@ -7,13 +7,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { username, password } = req.body;
 
   try {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    const response = await makeRequest(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ username, password }),
-    }).then((res) => res.json());
+    });
 
     res.setHeader(
       'Set-Cookie',
